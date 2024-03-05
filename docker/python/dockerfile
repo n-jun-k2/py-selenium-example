@@ -1,0 +1,8 @@
+ARG PYTHON_TAG
+
+FROM python:${PYTHON_TAG:?err}
+
+COPY ./docker/python/requirements.txt .
+
+RUN apt-get update \
+    && pip install -r requirements.txt

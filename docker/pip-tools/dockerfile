@@ -1,0 +1,6 @@
+ARG PYTHON_TAG
+
+FROM python:${PYTHON_TAG:?err}
+
+RUN pip install pip-tools --no-cache-dir \
+    && rm -rf /root/.cache/pip

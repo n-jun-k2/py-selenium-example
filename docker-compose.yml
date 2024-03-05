@@ -1,0 +1,36 @@
+version: "3"
+services:
+  piptools:
+    build:
+      context: .
+      dockerfile: ./docker/pip-tools/dockerfile
+      args:
+        - PYTHON_TAG=$PYTHON_TAG
+    working_dir: /tmp/src
+    entrypoint: >
+      ./main.sh
+    volumes:
+      - ./piptools:/tmp/src
+      - ./docker/python:/tmp/build
+    env_file:
+      - .env
+  selenium:
+    image: selenium/standalone-chrome:122.0
+    shm_size: 2gb
+    ports:
+      - 4444:4444
+      - 7900:7900
+  python:
+    build:
+      context: .
+      dockerfile: ./docker/python/dockerfile
+      args:
+        - PYTHON_TAG=$PYTHON_TAG
+    tty: true
+    working_dir: /packages
+    volumes:
+      - ./packages:/packages
+    env_file:
+      - .env
+    depends_on:
+      - selenium
